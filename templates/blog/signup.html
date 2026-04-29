@@ -1,0 +1,161 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<div class="row justify-content-center" style="min-height: 70vh; align-items: center;">
+    <div class="col-md-6 col-lg-5">
+        
+        <div class="card" style="border-radius: 16px; border: 1px solid #e2e8f0; background: white; padding: 2rem;">
+            
+            <!-- Header -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="color: #1a1f36; font-weight: 600; margin-bottom: 0.5rem;">Create an account</h2>
+                <p style="color: #64748b; font-size: 0.9rem;">Join the community and start sharing</p>
+                <div style="width: 50px; height: 2px; background: #3b82f6; margin: 1rem auto 0 auto;"></div>
+            </div>
+
+            <form method="POST" id="signupForm">
+                {% csrf_token %}
+                
+                <!-- Username Field -->
+                <div style="margin-bottom: 1.25rem;">
+                    <label for="id_username" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1a1f36; font-size: 0.85rem;">Username</label>
+                    <input type="text" 
+                           name="username" 
+                           id="id_username" 
+                           class="form-control" 
+                           required
+                           style="width: 100%; padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem;">
+                    <small style="color: #64748b; font-size: 0.7rem; margin-top: 0.25rem; display: block;">Required. 150 characters or fewer.</small>
+                </div>
+
+                <!-- Email Field (optional - add if needed) -->
+                {% if form.email %}
+                <div style="margin-bottom: 1.25rem;">
+                    <label for="id_email" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1a1f36; font-size: 0.85rem;">Email</label>
+                    <input type="email" 
+                           name="email" 
+                           id="id_email" 
+                           class="form-control"
+                           style="width: 100%; padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem;">
+                </div>
+                {% endif %}
+
+                <!-- Password Field -->
+                <div style="margin-bottom: 1.25rem;">
+                    <label for="id_password1" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1a1f36; font-size: 0.85rem;">Password</label>
+                    <input type="password" 
+                           name="password1" 
+                           id="id_password1" 
+                           class="form-control" 
+                           required
+                           style="width: 100%; padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem;">
+                    <small style="color: #64748b; font-size: 0.7rem; margin-top: 0.25rem; display: block;">
+                        • At least 8 characters<br>
+                        • Can't be too common<br>
+                        • Can't be entirely numeric
+                    </small>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="id_password2" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #1a1f36; font-size: 0.85rem;">Confirm password</label>
+                    <input type="password" 
+                           name="password2" 
+                           id="id_password2" 
+                           class="form-control" 
+                           required
+                           style="width: 100%; padding: 0.7rem 1rem; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.9rem;">
+                </div>
+
+                <!-- Sign Up Button -->
+                <button type="submit" class="btn btn-primary" id="signupBtn" style="width: 100%; padding: 0.75rem; border-radius: 8px; font-weight: 500;">
+                    <span id="btnText">Create account</span>
+                    <span id="btnSpinner" class="spinner-border spinner-border-sm" style="display: none; margin-left: 0.5rem;" role="status"></span>
+                </button>
+
+                <!-- Login Link -->
+                <div style="text-align: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #e2e8f0;">
+                    <p style="color: #64748b; font-size: 0.85rem; margin: 0;">
+                        Already have an account? 
+                        <a href="{% url 'login' %}" style="color: #3b82f6; text-decoration: none; font-weight: 500;">Sign in</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+        outline: none;
+    }
+    
+    /* Error styling for Django form errors */
+    .errorlist {
+        color: #ef4444;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+        margin-bottom: 0;
+        padding-left: 0;
+        list-style: none;
+    }
+    
+    input:invalid {
+        border-color: #cbd5e1;
+    }
+</style>
+
+<script>
+    // Password match validation
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    const form = document.getElementById('signupForm');
+    const signupBtn = document.getElementById('signupBtn');
+    const btnText = document.getElementById('btnText');
+    const btnSpinner = document.getElementById('btnSpinner');
+    
+    // Real-time password match check
+    if (password2) {
+        password2.addEventListener('input', function() {
+            if (password1.value !== this.value) {
+                this.style.borderColor = '#ef4444';
+                this.setCustomValidity('Passwords do not match');
+            } else {
+                this.style.borderColor = '#10b981';
+                this.setCustomValidity('');
+            }
+        });
+        
+        password1.addEventListener('input', function() {
+            if (password2.value && this.value !== password2.value) {
+                password2.style.borderColor = '#ef4444';
+                password2.setCustomValidity('Passwords do not match');
+            } else if (password2.value) {
+                password2.style.borderColor = '#10b981';
+                password2.setCustomValidity('');
+            }
+        });
+    }
+    
+    // Loading spinner on form submit
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Check if passwords match before showing spinner
+            if (password1 && password2 && password1.value !== password2.value) {
+                e.preventDefault();
+                alert('Passwords do not match');
+                return false;
+            }
+            
+            signupBtn.disabled = true;
+            btnText.textContent = 'Creating account...';
+            btnSpinner.style.display = 'inline-block';
+            signupBtn.style.opacity = '0.7';
+        });
+    }
+</script>
+
+{% endblock %}

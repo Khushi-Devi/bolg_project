@@ -1,0 +1,288 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog App</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fc;
+            color: #1a1f36;
+            line-height: 1.5;
+        }
+
+        /* Navbar - clean dark */
+        .navbar {
+            background: #1a1f36 !important;
+            padding: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+            letter-spacing: -0.3px;
+        }
+
+        /* Professional button styling */
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1.2rem !important;
+            margin: 0 0.2rem;
+            border-radius: 6px !important;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        /* Create Post button */
+        .nav-link[href*="create_post"] {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #e2e8f0 !important;
+        }
+
+        .nav-link[href*="create_post"]:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        /* Logout button */
+        .nav-link[href*="logout"] {
+            background: transparent;
+            border: 1px solid rgba(239,68,68,0.4);
+            color: #fecaca !important;
+        }
+
+        .nav-link[href*="logout"]:hover {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: white !important;
+        }
+
+        /* Login button */
+        .nav-link[href*="login"] {
+            background: #3b82f6;
+            color: white !important;
+            border: none;
+        }
+
+        .nav-link[href*="login"]:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        /* Signup button */
+        .nav-link[href*="signup"] {
+            background: #10b981;
+            color: white !important;
+            border: none;
+        }
+
+        .nav-link[href*="signup"]:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        /* Alert styling */
+        .alert {
+            border-radius: 8px;
+            border: none;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 1rem 1.2rem;
+        }
+
+        .alert-success { 
+            border-left: 3px solid #10b981; 
+            background: #f0fdf4;
+        }
+        .alert-danger { 
+            border-left: 3px solid #ef4444; 
+            background: #fef2f2;
+        }
+        .alert-info { 
+            border-left: 3px solid #3b82f6; 
+            background: #eff6ff;
+        }
+
+        /* Card styling - clean and modern */
+        .card {
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+            background: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            border-color: #cbd5e1;
+        }
+
+        /* Button styling */
+        .btn {
+            border-radius: 6px !important;
+            padding: 0.6rem 1.4rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        /* Form inputs */
+        input, textarea, select {
+            border-radius: 6px !important;
+            border: 1px solid #cbd5e1 !important;
+            padding: 0.6rem 1rem !important;
+            font-size: 0.9rem !important;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1) !important;
+            outline: none;
+        }
+
+        /* Footer - clean and minimal */
+        .footer {
+            background: #f1f5f9;
+            color: #475569;
+            border-top: 1px solid #e2e8f0;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            padding: 2rem 0 1.5rem 0;
+        }
+
+        .footer h5 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1a1f36;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-tagline {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1.2rem;
+        }
+
+        .footer-copyright {
+            font-size: 0.75rem;
+            color: #64748b;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+
+    <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'home' %}">BlogApp</a>
+
+    <div>
+      <ul class="navbar-nav ms-auto">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'create_post' %}">Create Post</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Messages -->
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Content -->
+<main class="main-content">
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+</main>
+
+<!-- Footer - No social icons, clean and professional -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content text-center">
+            <h5>BlogApp</h5>
+            <p class="footer-tagline">Share your thoughts with the world</p>
+            <div class="footer-copyright">
+                © 2026 Blog App | Made with <span style="color: #ef4444;">❤️</span> by <strong>Khushi Devi</strong>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init();
+
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(el => {
+      el.style.transition = 'opacity 0.3s';
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 300);
+    });
+  }, 3000);
+</script>
+
+</body>
+</html>
